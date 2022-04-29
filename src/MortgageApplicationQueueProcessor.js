@@ -1,4 +1,5 @@
 const CustomerRepository = require("./CustomerRepository");
+const NotEligibleForMortgageException = require("./exceptions/NotEligibleForMortgageException");
 
 class MortgageApplicationQueueProcessor {
   constructor(customerRepository) {
@@ -7,7 +8,10 @@ class MortgageApplicationQueueProcessor {
 
   processRequest(customerId, amountRequested) {
     const customer = this.customerRepository.getCustomer(customerId);
-    customer.updateBalance(amountRequested);
+
+    if (!customer.getMortgage(amountRequested)) {
+      throw new NotEligibleForMortgageException();
+    }
   }
 }
 

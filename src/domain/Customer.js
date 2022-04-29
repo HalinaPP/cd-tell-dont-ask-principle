@@ -18,18 +18,15 @@ module.exports = class Customer {
   }
 
   updateBalance(amount) {
-    this.validateEligibleForMortgage(amount);
     this.setBalance(this.getBalance() + amount);
   }
 
-  validateEligibleForMortgage(amount) {
-    if (this.isNotEligibleForMortgage(amount)) {
-      throw new NotEligibleForMortgageException();
+  getMortgage(amount) {
+    if (this.isEligibleForMortgage(amount)) {
+      this.updateBalance(amount);
+      return true;
     }
-  }
-
-  isNotEligibleForMortgage(amount) {
-    return !this.isEligibleForMortgage(amount);
+    return false;
   }
 
   isEligibleForMortgage(amount) {
